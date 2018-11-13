@@ -97,7 +97,7 @@ function PromiseDemo(fn) {
   this.then = function (onFulfilled, onRejected) {
     var self = this;
     return new PromiseDemo(function (resolve, reject) {
-      return self.done(function (result) {
+       self.done(function (result) {
         if (typeof onFulfilled === 'function') {
           try {
             return resolve(onFulfilled(result));
@@ -122,52 +122,32 @@ function PromiseDemo(fn) {
   }
 
   doResolve(fn, resolve, reject);
-
+  // console.log("inner:",this);
+  
 }
 
 /* 
-const resolve = (arg)=> console.log('resolve');
-const reject = (arg)=> console.log('reject');
 
-function TestPromise(cb){
-    function reject(value){
+  PromiseDemo constructor
+    doResolve(fn, res, rej)
+      res(value) // aka onFulfilled
+        getThen(result aka value)
+          null // value !== function
+        fulfill(result aka value) = changes state, set value, call handlers
+          handlers.forEach(handle);
+            handle = check state, call handler.onFulfilled / handler.onRejected
 
-    }
-    function resolve(value){
-
-    }
-    function catchErr(onRejection){
-
-    }
-    function then(fulfilledHandler, errorHandler){
-
-    }
-
-    return {
-        resolve,
-        reject,
-        catchErr,
-
-        then
-    }
-}
-
-class Demo extends Function{
-
-}
-
-let p =  new TestPromise( (resolve,reject)=>{
-    setTimeout( () => {
-        resolve();
-    }, 5000);
-});
-
-p.then( e=>console.log('then',e) )
-// .catch( e=>console.log('catch',e) ); */
+  then = return new PromiseDemo Obj = pass this as self
+            executer
+              return self.done(onFulfilled, onRejected) = check onFulfilled and call resolve / rej
+                handle({onFulfilled, onRejected})
+                
+*/
 
 const p = new PromiseDemo((res,rej)=>{
+  
   console.log('promise');
-  res(5);
+  // res(1);
   /* setTimeout( () => {
     // console.log('promise');
     res(5);
@@ -176,7 +156,8 @@ const p = new PromiseDemo((res,rej)=>{
 
 // p.then(e=>console.log('then',e) );
 
-setTimeout(() => {
-  p.then(e=>console.log('then',e) );
+// setTimeout(() => {
+  p.then(e=>{console.log('then1',e); return 2;} )
+    .then(e=> {console.log("then2",e);  throw new Error()  })
 
-}, 1000);
+// }, 1000);
