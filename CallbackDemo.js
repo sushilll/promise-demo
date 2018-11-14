@@ -24,18 +24,19 @@ let filename = "./mock.json"; */
 // console.log('after');
 
 const p = new Promise( (res,rej) =>{
-    // throw new Error('tet');
+    console.log('exec');
+    
     setTimeout(() => {
-        throw new Error('tet');
-        console.log('promise');
-        // rej(4);
+        // throw new Error('tet');
+        console.log('async');
+        rej(4);
     }, 1000);
 } );
 
  p.then( v=> console.log('then1',v) )
     .then( v=>console.log('then3:',v) )
    .catch( e=> {console.log('catch:',e); return 'catch 1' }   )
-    // .then( v=> console.log('then2:', v) ) */
+    .then( v=> console.log('then2:', v) ) 
  
     //console.log(p);
     
